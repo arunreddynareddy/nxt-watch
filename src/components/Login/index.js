@@ -2,6 +2,8 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {Redirect} from 'react-router-dom'
 
+import ThemeAndSaveContext from '../../context/ThemeAndSaveContext'
+
 import {
   LoginContainer,
   LoginCard,
@@ -68,13 +70,16 @@ class Login extends Component {
     }
   }
 
-  renderUsername = () => {
+  renderUsername = (labelTextColor, inputTextColor) => {
     const {username} = this.state
 
     return (
       <>
-        <FormLabel htmlFor="username">USERNAME</FormLabel>
+        <FormLabel htmlFor="username" color={labelTextColor}>
+          USERNAME
+        </FormLabel>
         <FormInput
+          color={inputTextColor}
           type="text"
           id="username"
           placeholder="Username"
@@ -85,13 +90,16 @@ class Login extends Component {
     )
   }
 
-  renderPassword = () => {
+  renderPassword = (labelTextColor, inputTextColor) => {
     const {password, showPassword} = this.state
 
     return (
       <>
-        <FormLabel htmlFor="password">PASSWORD</FormLabel>
+        <FormLabel htmlFor="password" color={labelTextColor}>
+          PASSWORD
+        </FormLabel>
         <FormInput
+          color={inputTextColor}
           type={showPassword ? 'text' : 'password'}
           id="password"
           placeholder="Password"
@@ -102,40 +110,56 @@ class Login extends Component {
     )
   }
 
-  renderShowPassword = () => (
+  renderShowPassword = inputTextColor => (
     <CheckboxContainer>
       <FormCheckbox
         type="checkbox"
         id="showPassword"
         onChange={this.onChangeShowPassword}
       />
-      <CheckboxLabel htmlFor="showPassword">Show Password</CheckboxLabel>
+      <CheckboxLabel htmlFor="showPassword" color={inputTextColor}>
+        Show Password
+      </CheckboxLabel>
     </CheckboxContainer>
   )
 
   render() {
-    const jwtToken = Cookies.get('jwt_token')
-    if (jwtToken !== undefined) {
-      return <Redirect path="/" />
-    }
-
-    const {showErrMsg, errorMsg} = this.state
     return (
-      <LoginContainer>
-        <LoginCard>
-          <WebsiteLogo
-            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-            alt="website logo"
-          />
-          <FormContainer onSubmit={this.onSubmitLoginForm}>
-            {this.renderUsername()}
-            {this.renderPassword()}
-            {this.renderShowPassword()}
-            <LoginButton type="submit">Login</LoginButton>
-            {showErrMsg && <LoginErrorMsg>*{errorMsg}</LoginErrorMsg>}
-          </FormContainer>
-        </LoginCard>
-      </LoginContainer>
+      <ThemeAndSaveContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+
+          const jwtToken = Cookies.get('jwt_token')
+          if (jwtToken !== undefined) {
+            return <Redirect path="/" />
+          }
+
+          const bgColorContainer = isDarkTheme ? '#313131' : '#f9f9f9'
+          const bgColorCard = isDarkTheme ? ' #0f0f0f' : '#f9f9f9'
+          const labelTextColor = isDarkTheme ? '#ebebeb' : '#64748b'
+          const inputTextColor = isDarkTheme ? '#f8fafc' : '#1e293b'
+
+          const websiteLogo = isDarkTheme
+            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
+
+          const {showErrMsg, errorMsg} = this.state
+          return (
+            <LoginContainer bgColor={bgColorContainer}>
+              <LoginCard bgColor={bgColorCard}>
+                <WebsiteLogo src={websiteLogo} alt="website logo" />
+                <FormContainer onSubmit={this.onSubmitLoginForm}>
+                  {this.renderUsername(labelTextColor, inputTextColor)}
+                  {this.renderPassword(labelTextColor, inputTextColor)}
+                  {this.renderShowPassword(inputTextColor)}
+                  <LoginButton type="submit">Login</LoginButton>
+                  {showErrMsg && <LoginErrorMsg>*{errorMsg}</LoginErrorMsg>}
+                </FormContainer>
+              </LoginCard>
+            </LoginContainer>
+          )
+        }}
+      </ThemeAndSaveContext.Consumer>
     )
   }
 }

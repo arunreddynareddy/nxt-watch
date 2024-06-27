@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const LoginContainer = styled.div`
-  background-color: #f9f9f9;
+  background-color: ${props => props.bgColor};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,14 +9,14 @@ export const LoginContainer = styled.div`
 `
 
 export const LoginCard = styled.div`
-  background-color: #f9f9f9;
+  background-color: ${props => props.bgColor};
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
   border: none;
   border-radius: 10px;
-  padding: 30px 15px 15px 15px;
+  padding: 30px 30px 15px;
 `
 export const WebsiteLogo = styled.img`
   width: 130px;
@@ -31,9 +31,9 @@ export const FormContainer = styled.form`
   margin-top: 10px;
 `
 export const FormLabel = styled.label`
-  color: #64748b;
+  color: ${props => props.color};
   font-family: 'Roboto';
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 800;
   margin-top: 25px;
   margin-bottom: 5px;
@@ -43,7 +43,7 @@ export const FormInput = styled.input`
   background-color: transparent;
   border: 1px solid #64748b;
   border-radius: 2px;
-  color: #1e293b;
+  color: ${props => props.color};
   font-family: 'Roboto';
   font-size: 12px;
   font-weight: 500;
@@ -69,15 +69,15 @@ export const FormCheckbox = styled.input`
 `
 
 export const CheckboxLabel = styled.label`
-  color: #1e293b;
+  color: ${props => props.color};
   font-family: 'Roboto';
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
 `
 
 export const LoginButton = styled.button`
   background-color: #3b82f6;
-  color: #f9f9f9;
+  color: #ffffff;
   font-family: 'Roboto';
   font-size: 14px;
   font-weight: 600;
